@@ -1,8 +1,8 @@
 package com.example.sharran.github.utils
 
-object Models {
-    data class SearchResult(val total_count: Long,
-                            val items : List<Repository>
+object APIModels {
+    data class Search(val total_count: Long = 0,
+                      val items : List<Repository> = emptyList()
     )
 
     data class Repository(val name : String,

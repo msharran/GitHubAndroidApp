@@ -1,7 +1,7 @@
 package com.example.sharran.github.services
 
 import com.example.sharran.github.utils.AppConstants
-import com.example.sharran.github.utils.Models
+import com.example.sharran.github.utils.APIModels
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -15,21 +15,19 @@ class APIClient{
         .build()
         .create(GitHubService::class.java)
 
-    fun fetchRepositories(query : String): Models.SearchResult? {
-        var searchResult : Models.SearchResult? = null
+    fun fetchRepositories(query : String, completionHandler: CompletionHandler) {
 
         service.fetchRepositories(query)
-            .enqueue(object : Callback<Models.SearchResult> {
-                override fun onResponse(call: Call<Models.SearchResult>, response: Response<Models.SearchResult>) {
+            .enqueue(object : Callback<APIModels.Search> {
+                override fun onResponse(call: Call<APIModels.Search>, response: Response<APIModels.Search>) {
                     println(response.body())
-                    searchResult = response.body()
+                    completionHandler.onSuccess(response.body() ?: APIModels.Search())
                 }
 
-                override fun onFailure(call: Call<Models.SearchResult>, t: Throwable) {
-                    t.printStackTrace()
+                override fun onFailure(call: Call<APIModels.Search>, t: Throwable) {
+                    completionHandler.onFailure(t)
                 }
             })
-        return searchResult
     }
 
 }
