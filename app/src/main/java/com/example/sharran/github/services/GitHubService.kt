@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 interface GitHubService {
     @GET("/search/repositories")
-    fun fetchRepositories(@Query("q") q: String): Call<APIModels.Search>
+    fun fetchRepositories(@Query("q") q: String): Call<APIModels.Repositories>
 
     @GET("repos/{fullName}/contributors")
     fun fetchContributers(@Path("fullName") fullName : String) : Call<List<APIModels.Contributor>>

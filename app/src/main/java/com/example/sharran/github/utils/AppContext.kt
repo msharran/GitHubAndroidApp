@@ -7,8 +7,11 @@ class AppContext {
     companion object {
         val instance by lazy { AppContext() }
     }
+    val apiClient by lazy { APIClient() } //singleton
 
     lateinit var searchActivity : SearchActivity
+    var repositories : List<APIModels.RepositoryDetail> = emptyList()
+    var contributors : List<APIModels.Contributor>? = null
 
-    val apiClient by lazy { APIClient() }
+
 }

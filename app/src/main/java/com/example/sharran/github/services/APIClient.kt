@@ -15,16 +15,16 @@ class APIClient{
         .build()
         .create(GitHubService::class.java)
 
-    fun fetchRepositories(query : String, completionHandler: CompletionHandler) {
+    fun fetchRepositories(searchQuery : String, completionHandler: CompletionHandler) {
 
-        service.fetchRepositories(query)
-            .enqueue(object : Callback<APIModels.Search> {
-                override fun onResponse(call: Call<APIModels.Search>, response: Response<APIModels.Search>) {
+        service.fetchRepositories(searchQuery)
+            .enqueue(object : Callback<APIModels.Repositories> {
+                override fun onResponse(call: Call<APIModels.Repositories>, response: Response<APIModels.Repositories>) {
                     println(response.body())
-                    completionHandler.onSuccess(response.body() ?: APIModels.Search())
+                    completionHandler.onSuccess(response.body() ?: APIModels.Repositories())
                 }
 
-                override fun onFailure(call: Call<APIModels.Search>, t: Throwable) {
+                override fun onFailure(call: Call<APIModels.Repositories>, t: Throwable) {
                     completionHandler.onFailure(t)
                 }
             })

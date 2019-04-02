@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                android:layout_height="wrap_content" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:elevation="6dp"
+            app:cardCornerRadius="6dp"
+            android:background="@drawable/rounded_corner_white"
+    >
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:layout_weight="2">
+                <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Full Name"
+                        android:textSize="22sp"
+                        android:text="sharran_murali/"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"/>
+                <TextView
+                        android:id="@+id/description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Description.."
+                        android:textSize="16sp"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="end"
+                    android:orientation="vertical">
+                <TextView
+                        android:id="@+id/language"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textAlignment="textEnd"
+                        android:drawableEnd="@drawable/ic_code"
+                        android:drawablePadding="5dp"
+                        android:layout_marginBottom="10dp"/>
+                <TextView
+                        android:id="@+id/watchers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textAlignment="textEnd"
+                        android:drawableEnd="@drawable/ic_eye"
+                        android:drawablePadding="5dp"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>
