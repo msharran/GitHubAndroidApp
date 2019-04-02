@@ -10,8 +10,12 @@ class AppContext {
     val apiClient by lazy { APIClient() } //singleton
 
     lateinit var searchActivity : SearchActivity
-    var repositories : List<APIModels.RepositoryDetail> = emptyList()
-    var contributors : List<APIModels.Contributor>? = null
+
+    lateinit var repositoryDetail : RepositoryDetail
+
+    var repositories : List<RepositoryDetail> = emptyList()
+
+    var contributors : List<Contributor> = emptyList()
 
 
 }

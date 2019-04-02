@@ -1,7 +1,7 @@
 package com.example.sharran.github.services
 
 import com.example.sharran.github.utils.AppConstants
-import com.example.sharran.github.utils.APIModels
+import com.example.sharran.github.utils.Repositories
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -18,13 +18,13 @@ class APIClient{
     fun fetchRepositories(searchQuery : String, completionHandler: CompletionHandler) {
 
         service.fetchRepositories(searchQuery)
-            .enqueue(object : Callback<APIModels.Repositories> {
-                override fun onResponse(call: Call<APIModels.Repositories>, response: Response<APIModels.Repositories>) {
+            .enqueue(object : Callback<Repositories> {
+                override fun onResponse(call: Call<Repositories>, response: Response<Repositories>) {
                     println(response.body())
-                    completionHandler.onSuccess(response.body() ?: APIModels.Repositories())
+                    completionHandler.onSuccess(response.body() ?: Repositories())
                 }
 
-                override fun onFailure(call: Call<APIModels.Repositories>, t: Throwable) {
+                override fun onFailure(call: Call<Repositories>, t: Throwable) {
                     completionHandler.onFailure(t)
                 }
             })
