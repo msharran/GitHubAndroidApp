@@ -8,6 +8,7 @@ import kotlinx.android.synthetic.main.activity_repository_details.*
 import android.graphics.BitmapFactory
 import android.view.MenuItem
 import android.view.View
+import com.example.sharran.github.DialogFragment.ProjectDialogFragment
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.net.URL
@@ -35,14 +36,7 @@ class RepositoryDetailsActivity : AppCompatActivity() {
 
         setImage()
         initializeFields()
-    }
-
-    private fun initializeFields() {
-        repository_name.text = repositoryDetail.name
-        repository_description.text = repositoryDetail.description
-        repository_link.text = repositoryDetail.html_url
-        repository_watchers.text = repositoryDetail.watchers.toString()
-        repository_language.text = repositoryDetail.language
+        initializeContributors()
     }
 
     private fun setImage() {
@@ -55,11 +49,13 @@ class RepositoryDetailsActivity : AppCompatActivity() {
                 uiThread {
                     if (bitmap == null)
                         repository_image.setImageResource(R.drawable.profile)
-                    else repository_image.setImageBitmap(bitmap)
+                    else
+                        repository_image.setImageBitmap(bitmap)
                     showSpinner(false)
                 }
             } catch (e: Exception) {
                 uiThread {
+                    e.printStackTrace()
                     repository_image.setImageResource(R.drawable.profile)
                     showSpinner(false)
                 }
@@ -67,7 +63,21 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun showSpinner(show: Boolean) {
+    private fun initializeFields() {
+        repository_name.text = repositoryDetail.name
+        repository_description.text = repositoryDetail.description
+        repository_link.text = repositoryDetail.html_url
+        repository_watchers.text = repositoryDetail.watchers.toString()
+        repository_language.text = repositoryDetail.language
+    }
+
+    private fun initializeContributors() {
+       repository_link.setOnClickListener {
+            ProjectDialogFragment().apply { url = repositoryDetail.html_url }.show(supportFragmentManager,"")
+       }
+    }
+
+    fun showSpinner(show: Boolean) {
         if (show) {
             progress_layout.visibility = View.VISIBLE
             repository_details_layout.visibility = View.GONE

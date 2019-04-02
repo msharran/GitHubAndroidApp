@@ -1,5 +1,6 @@
 package com.example.sharran.github.utils
 
+import android.webkit.WebView
 import com.example.sharran.github.SearchActivity
 import com.example.sharran.github.services.APIClient
 
@@ -13,9 +14,6 @@ class AppContext {
 
     lateinit var repositoryDetail : RepositoryDetail
 
-    var repositories : List<RepositoryDetail> = emptyList()
-
     var contributors : List<Contributor> = emptyList()
-
 
 }

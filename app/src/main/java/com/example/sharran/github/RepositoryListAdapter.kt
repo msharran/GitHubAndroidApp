@@ -6,19 +6,20 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.example.sharran.github.utils.AppContext
 import com.example.sharran.github.utils.RepositoryDetail
 import kotlinx.android.synthetic.main.repository_list_item.view.*
 
 class RepositoryListAdapter(val context: Context , var repositoryList : List<RepositoryDetail>) :
     RecyclerView.Adapter<RepositoryListAdapter.RepositoryListViewHolder>() {
-    val appContext = AppContext.instance
+    private val appContext = AppContext.instance
 
     class RepositoryListViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
-        val name = itemView.name
-        val description = itemView.description
-        val language = itemView.language
-        val watchers = itemView.watchers
+        val name: TextView = itemView.name
+        val description: TextView = itemView.description
+        val language: TextView = itemView.language
+        val watchers: TextView = itemView.watchers
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepositoryListViewHolder {
