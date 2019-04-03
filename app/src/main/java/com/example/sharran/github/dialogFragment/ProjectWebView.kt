@@ -1,7 +1,9 @@
 package com.example.sharran.github.dialogFragment
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
@@ -47,8 +49,6 @@ class ProjectWebView : DialogFragment() {
         project_webview.settings.javaScriptEnabled = true
         project_webview.settings.loadsImagesAutomatically = true
         project_webview.settings.allowFileAccess = true
-        project_webview.settings.allowFileAccessFromFileURLs = true
-        project_webview.settings.allowUniversalAccessFromFileURLs = true
         project_webview.settings.setSupportZoom(true)
         project_webview.settings.allowContentAccess = true
         project_webview.webViewClient = object :WebViewClient(){

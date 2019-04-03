@@ -6,13 +6,14 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MotionEvent
 import android.view.View
 import com.example.sharran.github.adapters.RepositoryListAdapter
+import com.example.sharran.github.dialogFragment.FilterData
+import com.example.sharran.github.dialogFragment.FilterDialog
 import com.example.sharran.github.services.CompletionHandler
-import com.example.sharran.github.utils.AppContext
-import com.example.sharran.github.utils.EasyToast
-import com.example.sharran.github.utils.Repositories
-import com.example.sharran.github.utils.RepositoryDetail
+import com.example.sharran.github.services.FilterListener
+import com.example.sharran.github.utils.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_search.*
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.progress_layout.*
 import java.util.concurrent.TimeUnit
 
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity() , FilterListener{
     private val appContext = AppContext.instance
     private val apiClient = appContext.apiClient
     private lateinit var repositoryListAdapter : RepositoryListAdapter
@@ -62,8 +63,19 @@ class SearchActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) { searchDebounce.onNext(s.toString()) }
         })
 
-        search_btn.setOnClickListener {
+        search_view.setOnTouchListener { v, event ->
+            val DRAWABLE_RIGHT = 2
+            if(event.action == MotionEvent.ACTION_UP) {
+                if(event.rawX >= (search_view.right - search_view.compoundDrawables[DRAWABLE_RIGHT].bounds.width())) {
 
+                    val bottomSheetFragment =  FilterDialog().apply {
+                        filterListener = this@SearchActivity
+                    }
+                    bottomSheetFragment.show(this.supportFragmentManager, bottomSheetFragment.tag)
+                    return@setOnTouchListener true
+                }
+            }
+            return@setOnTouchListener false
         }
     }
 
@@ -127,4 +139,16 @@ class SearchActivity : AppCompatActivity() {
             waveLoadingView.cancelAnimation()
         }
     }
+
+    override fun onFilterClicked(filterData: FilterData) {
+        val searchQuery = constructQuery(filterData)
+        println(searchQuery)
+        searchRepoFromServer(searchQuery)
+    }
+
+    private fun constructQuery(filterData: FilterData)  = "${search_view.text}"
+                    .buildQuery(filterData.language){ "+language:$it" }
+                    .buildQuery(filterData.createdFrom,filterData.createdTo){ from , to -> "+created:$from..$to" }
+                    .buildQuery(filterData.pushedFrom,filterData.pushedTo){ from , to -> "+pushed:$from..$to" }
+
 }

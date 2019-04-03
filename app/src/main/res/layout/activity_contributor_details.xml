@@ -65,8 +65,7 @@
        
         <RelativeLayout android:layout_width="match_parent"
                         android:layout_height="45sp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
+                        android:layout_margin="10dp"
                         android:elevation="3dp"
                         android:background="@drawable/rounded_corner_primary">
             <TextView

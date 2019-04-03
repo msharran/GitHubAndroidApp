@@ -10,8 +10,10 @@
 >
 
     <LinearLayout
+            android:background="@color/colorPrimary"
            android:orientation="horizontal"
            android:layout_width="match_parent"
+           android:elevation="4dp"
            android:layout_height="wrap_content">
        <EditText
                android:id="@+id/search_view"
@@ -25,25 +27,14 @@
                android:maxLines="1"
                android:drawableStart="@drawable/ic_search"
                android:drawablePadding="10dp"
+               android:drawableRight="@drawable/ic_filter"
                android:background="@drawable/rounded_corner_white"
                android:padding="10dp"
                android:layout_margin="10dp"
                android:textAlignment="textStart"
                android:layout_weight="10"
-               android:drawableLeft="@drawable/ic_search" android:gravity="start"/>
-       <Button
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:id="@+id/search_btn"
-               android:elevation="6dp"
-               android:text="Search"
-               android:textColor="@color/white"
-               android:layout_weight="1"
-               android:background="@drawable/rounded_corner_primary"
-               android:layout_gravity="center"
-               android:padding="10dp"
-               android:layout_marginEnd="10dp"
-               android:layout_marginRight="10dp"/>
+               android:drawableLeft="@drawable/ic_search" android:gravity="start"
+               android:drawableEnd="@drawable/ic_filter"/>
 
    </LinearLayout>
 

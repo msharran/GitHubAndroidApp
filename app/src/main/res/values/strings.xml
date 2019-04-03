@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">GitHub</string>
-    <string name="oops_cannot_connect_to_server">Oops ! Cannot connect to server</string>
+    <string name="oops_cannot_connect_to_server">Oops ! Cannot connect to server…</string>
 </resources>
