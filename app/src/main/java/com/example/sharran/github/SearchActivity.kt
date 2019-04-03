@@ -43,7 +43,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun searchRepoFromServer(searchQuery: String) {
         showSpinner(true)
-        apiClient.fetchRepositories(
+        apiClient.fetchRepos(
             searchQuery = searchQuery,
             completionHandler = object : CompletionHandler {
                 override fun <T> onSuccess(response: T) {

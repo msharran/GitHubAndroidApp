@@ -36,7 +36,7 @@
     <LinearLayout
             android:id="@+id/repository_details_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
 
@@ -62,6 +62,7 @@
                     android:layout_marginTop="155dp"
                     android:layout_marginBottom="5dp"
                     android:layout_marginLeft="10dp"
+                    android:elevation="3dp"
                     android:layout_marginRight="10dp">
                 <LinearLayout
                         android:layout_width="match_parent"
@@ -86,114 +87,121 @@
             </android.support.v7.widget.CardView>
         </RelativeLayout>
 
-        <LinearLayout
-                android:layout_width="360dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="12dp"
-                android:layout_gravity="center" >
-
+        <ScrollView android:layout_width="match_parent" android:layout_height="wrap_content">
             <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
+                    android:layout_width="360dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-            >
-                <TextView
-                        android:id="@+id/repository_description"
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="17sp"
-                        android:padding="10dp"
-                        android:textAlignment="center"
-                        android:hint="Description"/>
-            </LinearLayout>
+                    android:orientation="vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="12dp"
+                    android:layout_gravity="center" >
 
-            <LinearLayout
-                    android:layout_marginTop="15dp"
-                    android:orientation="horizontal"
-                    android:paddingStart="25dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/ic_eye"/>
-                <TextView
-                        android:id="@+id/repository_watchers"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="17sp"
-                        android:paddingLeft="20dp"
-                        android:textColor="@color/colorPrimary"
-                        android:hint="Watchers"/>
-            </LinearLayout>
-            <LinearLayout
-                    android:layout_marginTop="15dp"
-                    android:orientation="horizontal"
-                    android:paddingStart="25dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/ic_code"/>
-                <TextView
-                        android:id="@+id/repository_language"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="17sp"
-                        android:paddingLeft="20dp"
-                        android:textColor="@color/colorPrimary"
-                        android:hint="Language"/>
-            </LinearLayout>
-            <LinearLayout
-                    android:layout_marginTop="15dp"
-                    android:orientation="horizontal"
-                    android:paddingStart="25dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                <ImageView
-                        android:layout_gravity="center"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/ic_link"/>
-                <TextView
-                        android:id="@+id/repository_link"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textStyle="bold"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="17sp"
-                        android:paddingLeft="20dp"
-                        android:hint="Project Link"/>
-            </LinearLayout>
-            <LinearLayout
-                    android:layout_marginTop="25dp"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                <Button
-                        android:id="@+id/contributors"
-                        android:layout_gravity="center_vertical"
+                <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:textSize="15sp"
-                        android:background="@drawable/rounded_corner_primary"
-                        android:textColor="@color/white"
-                        android:text="Contributors"/>
+                        android:gravity="center"
+                >
+                    <TextView
+                            android:id="@+id/repository_description"
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="17sp"
+                            android:padding="10dp"
+                            android:textAlignment="center"
+                            android:hint="Description"/>
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal"
+                        android:paddingStart="25dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="25dp">
+                    <ImageView
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ic_eye"/>
+                    <TextView
+                            android:id="@+id/repository_watchers"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="17sp"
+                            android:paddingLeft="20dp"
+                            android:textColor="@color/colorPrimary"
+                            android:hint="Watchers"/>
+                </LinearLayout>
+                <LinearLayout
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal"
+                        android:paddingStart="25dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:paddingLeft="25dp">
+                    <ImageView
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ic_code"/>
+                    <TextView
+                            android:id="@+id/repository_language"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="17sp"
+                            android:paddingLeft="20dp"
+                            android:textColor="@color/colorPrimary"
+                            android:hint="Language"/>
+                </LinearLayout>
+                <LinearLayout
+                        android:layout_marginTop="15dp"
+                        android:orientation="horizontal"
+                        android:paddingStart="25dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:paddingLeft="25dp">
+                    <ImageView
+                            android:layout_gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/ic_link"/>
+                    <TextView
+                            android:id="@+id/repository_link"
+                            android:layout_gravity="center_vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:textColor="@color/blue"
+                            android:textSize="17sp"
+                            android:paddingLeft="20dp"
+                            android:hint="Project Link"/>
+                </LinearLayout>
             </LinearLayout>
-
-        </LinearLayout>
-
+        </ScrollView>
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:elevation="3dp"
+                        android:background="@drawable/rounded_corner_primary">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CONTRIBUTORS"
+                    android:textColor="@color/white"
+                    android:layout_margin="10dp"
+                    android:layout_centerInParent="true"
+                    android:textAlignment="center"
+            />
+        </RelativeLayout>
+        <ListView
+                android:id="@+id/contributors_list"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:padding="10dp"
+                android:background="@android:color/white"/>
     </LinearLayout>
 </RelativeLayout>

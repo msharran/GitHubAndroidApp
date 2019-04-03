@@ -1,7 +1,6 @@
-package com.example.sharran.github.DialogFragment
+package com.example.sharran.github.dialogFragment
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
@@ -13,11 +12,10 @@ import android.webkit.WebResourceRequest
 import com.example.sharran.github.R
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.example.sharran.github.RepositoryDetailsActivity
 import kotlinx.android.synthetic.main.dialog_project.*
 
 
-class ProjectDialogFragment : DialogFragment() {
+class ProjectWebView : DialogFragment() {
 
     lateinit var url : String
 
@@ -29,19 +27,7 @@ class ProjectDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        showSpinner(true)
         loadWebView(url = url)
-        project_webview.webViewClient = object :WebViewClient(){
-            override fun onPageFinished(view: WebView?, url: String?) {
-                super.onPageFinished(view, url)
-                showSpinner(false)
-            }
-
-            override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
-                super.onReceivedError(view, request, error)
-               showSpinner(false)
-            }
-        }
     }
 
     override fun onResume() {
@@ -55,7 +41,8 @@ class ProjectDialogFragment : DialogFragment() {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun loadWebView(url: String): WebView {
+    private fun loadWebView(url: String) {
+        showSpinner(true)
         project_webview.loadUrl(url)
         project_webview.settings.javaScriptEnabled = true
         project_webview.settings.loadsImagesAutomatically = true
@@ -64,7 +51,17 @@ class ProjectDialogFragment : DialogFragment() {
         project_webview.settings.allowUniversalAccessFromFileURLs = true
         project_webview.settings.setSupportZoom(true)
         project_webview.settings.allowContentAccess = true
-        return project_webview
+        project_webview.webViewClient = object :WebViewClient(){
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+                showSpinner(false)
+            }
+
+            override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                super.onReceivedError(view, request, error)
+                showSpinner(false)
+            }
+        }
     }
 
     private fun showSpinner(show: Boolean) {

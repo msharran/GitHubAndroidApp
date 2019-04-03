@@ -8,14 +8,18 @@ import kotlinx.android.synthetic.main.activity_repository_details.*
 import android.graphics.BitmapFactory
 import android.view.MenuItem
 import android.view.View
-import com.example.sharran.github.DialogFragment.ProjectDialogFragment
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import com.example.sharran.github.dialogFragment.ProjectWebView
+import com.example.sharran.github.services.CompletionHandler
+import com.example.sharran.github.utils.Contributor
+import com.example.sharran.github.utils.EasyToast
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.net.URL
 
 
 class RepositoryDetailsActivity : AppCompatActivity() {
-
     private val appContext = AppContext.instance
     private val repositoryDetail = appContext.repositoryDetail
 
@@ -34,50 +38,90 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_repository_details)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        setImage()
-        initializeFields()
-        initializeContributors()
+        fetchContributorsAndInitialize()
     }
 
-    private fun setImage() {
-        showSpinner(true)
+    private fun setImageInBackground() {
         doAsync {
             val bitmap: Bitmap?
             try {
                 val avatarUrl = URL(repositoryDetail.owner.avatar_url)
                 bitmap = BitmapFactory.decodeStream(avatarUrl.openConnection().getInputStream())
                 uiThread {
-                    if (bitmap == null)
-                        repository_image.setImageResource(R.drawable.profile)
-                    else
-                        repository_image.setImageBitmap(bitmap)
-                    showSpinner(false)
+                    showImage(bitmap)
                 }
             } catch (e: Exception) {
                 uiThread {
                     e.printStackTrace()
-                    repository_image.setImageResource(R.drawable.profile)
-                    showSpinner(false)
+                    showImage(null)
                 }
             }
         }
     }
 
-    private fun initializeFields() {
+    private fun showImage(bitmap: Bitmap?) {
+        if (bitmap == null)
+            repository_image.setImageResource(R.drawable.profile)
+        else
+            repository_image.setImageBitmap(bitmap)
+        showSpinner(false)
+    }
+
+    private fun initializeRepoDetails() {
         repository_name.text = repositoryDetail.name
         repository_description.text = repositoryDetail.description
         repository_link.text = repositoryDetail.html_url
         repository_watchers.text = repositoryDetail.watchers.toString()
         repository_language.text = repositoryDetail.language
+        repository_link.setOnClickListener {
+            ProjectWebView().apply { url = repositoryDetail.html_url }.show(supportFragmentManager,"")
+        }
     }
 
-    private fun initializeContributors() {
-       repository_link.setOnClickListener {
-            ProjectDialogFragment().apply { url = repositoryDetail.html_url }.show(supportFragmentManager,"")
-       }
+    private fun fetchContributorsAndInitialize() {
+        showSpinner(true)
+        appContext.apiClient.fetchContributors(
+            fullName = repositoryDetail.full_name ,
+            completionHandler = object : CompletionHandler{
+                override fun <T> onSuccess(response: T) {
+                    initializeContributorsList(response as List<Contributor>)
+                    initializeRepoDetails()
+                    setImageInBackground()
+                }
+
+                override fun onFailure(throwable: Throwable) {
+                    showSpinner(false)
+                    EasyToast.show(this@RepositoryDetailsActivity,getString(R.string.oops_cannot_connect_to_server))
+                }
+            }
+        )
     }
 
-    fun showSpinner(show: Boolean) {
+    private fun initializeContributorsList(contributors: List<Contributor>) {
+        var contributorNames = arrayListOf<String>()
+        if (contributors.isEmpty())
+            contributorNames.add("There are no contributors for this repository")
+        contributorNames = contributors.map { it.login } as ArrayList<String>
+
+        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, contributorNames)
+        contributors_list.adapter = adapter
+        contributors_list.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            appContext.apiClient.fetchUserRepos(
+                userReposUrl = contributors[position].repos_url,
+                completionHandler = object : CompletionHandler {
+                    override fun <T> onSuccess(response: T) {
+
+                    }
+
+                    override fun onFailure(throwable: Throwable) {
+
+                    }
+                }
+            )
+        }
+    }
+
+    private fun showSpinner(show: Boolean) {
         if (show) {
             progress_layout.visibility = View.VISIBLE
             repository_details_layout.visibility = View.GONE

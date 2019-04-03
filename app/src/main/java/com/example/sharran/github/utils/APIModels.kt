@@ -24,5 +24,6 @@ data class Owner(
 data class Contributor(
     val login: String,
     val avatar_url: String,
-    val repos_url: String
+    val repos_url: String,
+    val contributions : Int
 )
