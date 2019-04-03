@@ -15,6 +15,7 @@ import com.example.sharran.github.dialogFragment.ProjectWebView
 import com.example.sharran.github.services.CompletionHandler
 import com.example.sharran.github.utils.Contributor
 import com.example.sharran.github.utils.EasyToast
+import com.example.sharran.github.utils.checkNetworkAndExecute
 import kotlinx.android.synthetic.main.progress_layout.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -76,7 +77,9 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         repository_watchers.text = repositoryDetail.watchers.toString()
         repository_language.text = repositoryDetail.language
         repository_link.setOnClickListener {
-            ProjectWebView().apply { url = repositoryDetail.html_url }.show(supportFragmentManager,"")
+           checkNetworkAndExecute(this){
+               ProjectWebView().apply { url = repositoryDetail.html_url }.show(supportFragmentManager,"")
+           }
         }
     }
 
@@ -109,15 +112,14 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, contributorNames)
         contributors_list.adapter = adapter
         contributors_list.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            storeSelectedConributor(contributors, position)
-            startActivity(Intent(this@RepositoryDetailsActivity,ContributorDetailsActivity::class.java))
+            checkNetworkAndExecute(this){
+                storeSelectedContributor(contributors, position)
+                startActivity(Intent(this@RepositoryDetailsActivity,ContributorDetailsActivity::class.java))
+            }
         }
     }
 
-    private fun storeSelectedConributor(
-        contributors: List<Contributor>,
-        position: Int
-    ) {
+    private fun storeSelectedContributor(contributors: List<Contributor>, position: Int) {
         if (contributors.isNotEmpty()) {
             appContext.contributor = contributors[position]
         } else appContext.contributor = Contributor()

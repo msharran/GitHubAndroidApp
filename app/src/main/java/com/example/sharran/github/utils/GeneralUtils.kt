@@ -1,6 +1,9 @@
 package com.example.sharran.github.utils
 
 import android.app.Activity
+import android.content.Context
+import android.net.ConnectivityManager
+import android.support.v4.content.ContextCompat.getSystemService
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 
@@ -24,4 +27,17 @@ fun String.buildQuery(value: String, query : (String) -> String): String {
         value.isEmpty() -> this
         else -> this + query(value)
     }
+}
+
+fun isNetworkAvailable(context: Context): Boolean {
+    val  conMgr =  context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val  activeNetwork = conMgr.activeNetworkInfo
+    return activeNetwork != null && activeNetwork.isConnected
+}
+
+fun checkNetworkAndExecute (context: Context, task : () -> Unit){
+    if (isNetworkAvailable(context))
+        task()
+    else
+        EasyToast.show(context,"Please Check Your Internet Connection...")
 }
