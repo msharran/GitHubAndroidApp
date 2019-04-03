@@ -14,12 +14,15 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content">
        <EditText
-               android:id="@+id/search_repository"
+               android:id="@+id/search_view"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:elevation="6dp"
                android:hint="Search Repositories..."
-               android:singleLine="true"
+               android:imeOptions="actionSearch"
+               android:inputType="text"
+               android:lines="1"
+               android:maxLines="1"
                android:drawableStart="@drawable/ic_search"
                android:drawablePadding="10dp"
                android:background="@drawable/rounded_corner_white"

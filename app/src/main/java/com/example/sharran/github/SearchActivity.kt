@@ -1,8 +1,11 @@
 package com.example.sharran.github
 
-import android.support.v7.app.AppCompatActivity
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import com.example.sharran.github.adapters.RepositoryListAdapter
 import com.example.sharran.github.services.CompletionHandler
@@ -10,22 +13,35 @@ import com.example.sharran.github.utils.AppContext
 import com.example.sharran.github.utils.EasyToast
 import com.example.sharran.github.utils.Repositories
 import com.example.sharran.github.utils.RepositoryDetail
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.progress_layout.*
+import java.util.concurrent.TimeUnit
 
 
 class SearchActivity : AppCompatActivity() {
     private val appContext = AppContext.instance
     private val apiClient = appContext.apiClient
     private lateinit var repositoryListAdapter : RepositoryListAdapter
+    private lateinit var searchDebounce : PublishSubject<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
         appContext.searchActivity = this
 
+        initializeSearchDebounce()
         initializeRecyclerView()
         initializeSearchView()
+    }
+
+    @SuppressLint("CheckResult")
+    private fun initializeSearchDebounce() {
+        searchDebounce = PublishSubject.create()
+        searchDebounce.debounce(400, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { query -> searchRepoFromServer(query) }
     }
 
     private fun initializeRecyclerView() {
@@ -37,8 +53,17 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun initializeSearchView() {
+
+        search_view.addTextChangedListener(object :TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) { searchDebounce.onNext(s.toString()) }
+        })
+
         search_btn.setOnClickListener {
-            searchRepoFromServer(searchQuery = search_repository.text.toString())
+
         }
     }
 
