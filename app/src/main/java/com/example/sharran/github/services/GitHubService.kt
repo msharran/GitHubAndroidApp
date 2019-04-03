@@ -10,7 +10,7 @@ import retrofit2.http.Query
 
 interface GitHubService {
     @GET("/search/repositories")
-    fun fetchRepos(@Query("q") q: String): Call<Repositories>
+    fun fetchRepos(@Query("q",encoded = true) q: String): Call<Repositories>
 
     @GET("repos/{fullName}/contributors")
     fun fetchContributors(@Path("fullName", encoded = true) fullName : String) : Call<List<Contributor>>

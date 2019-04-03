@@ -44,33 +44,10 @@
 
    </LinearLayout>
 
-    <RelativeLayout
-            android:id="@+id/progress_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-    >
-        <me.itangqi.waveloadingview.WaveLoadingView
-                android:layout_centerInParent="true"
-                android:id="@+id/waveLoadingView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                app:wlv_borderColor="@color/colorAccent"
-                app:wlv_borderWidth="3dp"
-                app:wlv_progressValue="40"
-                android:layout_gravity="center"
-                app:wlv_shapeType="circle"
-                app:wlv_round_rectangle="true"
-                app:wlv_triangle_direction="north"
-                app:wlv_titleCenterStrokeWidth="3dp"
-                app:wlv_titleCenterSize="24sp"
-                app:wlv_waveAmplitude="70"
-                app:wlv_waveColor="@color/colorAccent"/>
-
-    </RelativeLayout>
+    <include layout="@layout/progress_layout"/>
 
 <RelativeLayout
-        android:id="@+id/recycler_layout"
+        android:id="@+id/search_recycler_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 >
@@ -82,7 +59,8 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <RelativeLayout
+    <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
@@ -92,11 +70,19 @@
     >
         <ImageView
                 android:id="@+id/github_img"
+                android:layout_width="70sp"
+                android:layout_height="70sp"
+                android:src="@drawable/ic_github_logo"
+        />
+        <TextView
+                android:layout_margin="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/github"
+                android:text="Search to find Repos..."
+                android:textStyle="italic"
+                android:textColor="@color/colorPrimary"
         />
-    </RelativeLayout>
+    </LinearLayout>
 </RelativeLayout>
 
 </LinearLayout>

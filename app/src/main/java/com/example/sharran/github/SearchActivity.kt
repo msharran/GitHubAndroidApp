@@ -4,13 +4,14 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import com.example.sharran.github.adapters.RepositoryListAdapter
 import com.example.sharran.github.services.CompletionHandler
 import com.example.sharran.github.utils.AppContext
 import com.example.sharran.github.utils.EasyToast
 import com.example.sharran.github.utils.Repositories
 import com.example.sharran.github.utils.RepositoryDetail
 import kotlinx.android.synthetic.main.activity_search.*
-
+import kotlinx.android.synthetic.main.progress_layout.*
 
 
 class SearchActivity : AppCompatActivity() {
@@ -44,10 +45,11 @@ class SearchActivity : AppCompatActivity() {
     private fun searchRepoFromServer(searchQuery: String) {
         showSpinner(true)
         apiClient.fetchRepos(
-            searchQuery = searchQuery,
+            searchQuery = "$searchQuery+sort:stars",
             completionHandler = object : CompletionHandler {
-                override fun <T> onSuccess(response: T) {
-                    updateRecyclerView(sortByWatchers(response as Repositories))
+                override fun <T> onSuccess(response: T?) {
+                    val repositories = response ?: Repositories()
+                    updateRecyclerView(fetchFirstTen(repositories as Repositories))
                     showSpinner(false)
                 }
 
@@ -70,12 +72,11 @@ class SearchActivity : AppCompatActivity() {
         repositoryListAdapter.notifyDataSetChanged()
     }
 
-    private fun sortByWatchers(repositories: Repositories): List<RepositoryDetail> {
+    private fun fetchFirstTen(repositories: Repositories): List<RepositoryDetail> {
         val items = repositories.items
-        val sortedByWatchers = items.sortedByDescending { it.watchers }
         return if (items.size > 10)
-                 sortedByWatchers.subList(0,10)
-               else sortedByWatchers
+                 items.subList(0,10)
+               else items
     }
 
     private fun showEmptyResults(enable: Boolean){
@@ -92,12 +93,12 @@ class SearchActivity : AppCompatActivity() {
     private fun showSpinner(show: Boolean) {
         if (show){
             progress_layout.visibility = View.VISIBLE
-            recycler_layout.visibility = View.GONE
+            search_recycler_layout.visibility = View.GONE
             waveLoadingView.startAnimation()
         }
         else{
             progress_layout.visibility = View.GONE
-            recycler_layout.visibility = View.VISIBLE
+            search_recycler_layout.visibility = View.VISIBLE
             waveLoadingView.cancelAnimation()
         }
     }

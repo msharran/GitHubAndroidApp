@@ -1,5 +1,6 @@
 package com.example.sharran.github
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +15,7 @@ import com.example.sharran.github.dialogFragment.ProjectWebView
 import com.example.sharran.github.services.CompletionHandler
 import com.example.sharran.github.utils.Contributor
 import com.example.sharran.github.utils.EasyToast
+import kotlinx.android.synthetic.main.progress_layout.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.net.URL
@@ -83,8 +85,9 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         appContext.apiClient.fetchContributors(
             fullName = repositoryDetail.full_name ,
             completionHandler = object : CompletionHandler{
-                override fun <T> onSuccess(response: T) {
-                    initializeContributorsList(response as List<Contributor>)
+                override fun <T> onSuccess(response: T?) {
+                    val contributors = if (response == null) emptyList() else response  as List<Contributor>
+                    initializeContributorsList(contributors)
                     initializeRepoDetails()
                     setImageInBackground()
                 }
@@ -106,19 +109,18 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, contributorNames)
         contributors_list.adapter = adapter
         contributors_list.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            appContext.apiClient.fetchUserRepos(
-                userReposUrl = contributors[position].repos_url,
-                completionHandler = object : CompletionHandler {
-                    override fun <T> onSuccess(response: T) {
-
-                    }
-
-                    override fun onFailure(throwable: Throwable) {
-
-                    }
-                }
-            )
+            storeSelectedConributor(contributors, position)
+            startActivity(Intent(this@RepositoryDetailsActivity,ContributorDetailsActivity::class.java))
         }
+    }
+
+    private fun storeSelectedConributor(
+        contributors: List<Contributor>,
+        position: Int
+    ) {
+        if (contributors.isNotEmpty()) {
+            appContext.contributor = contributors[position]
+        } else appContext.contributor = Contributor()
     }
 
     private fun showSpinner(show: Boolean) {

@@ -1,4 +1,4 @@
-package com.example.sharran.github
+package com.example.sharran.github.adapters
 
 import android.content.Context
 import android.content.Intent
@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.example.sharran.github.R
+import com.example.sharran.github.RepositoryDetailsActivity
 import com.example.sharran.github.utils.AppContext
 import com.example.sharran.github.utils.RepositoryDetail
 import kotlinx.android.synthetic.main.repository_list_item.view.*
@@ -25,7 +27,7 @@ class RepositoryListAdapter(val context: Context , var repositoryList : List<Rep
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RepositoryListViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.repository_list_item, parent, false)
-        return RepositoryListAdapter.RepositoryListViewHolder(view)
+        return RepositoryListViewHolder(view)
     }
 
     override fun getItemCount(): Int = repositoryList.size
@@ -40,7 +42,7 @@ class RepositoryListAdapter(val context: Context , var repositoryList : List<Rep
         holder.watchers.text = repository.watchers.toString()
         holder.itemView.setOnClickListener {
             appContext.repositoryDetail = repository
-            val intent = Intent(context,RepositoryDetailsActivity::class.java)
+            val intent = Intent(context, RepositoryDetailsActivity::class.java)
             context.startActivity(intent)
         }
     }

@@ -8,12 +8,12 @@ class AppContext {
     companion object {
         val instance by lazy { AppContext() }
     }
-    val apiClient by lazy { APIClient() } //singleton
+    //singleton
+    val apiClient by lazy { APIClient() }
 
+    //activity params
     lateinit var searchActivity : SearchActivity
-
     lateinit var repositoryDetail : RepositoryDetail
-
-    var contributors : List<Contributor> = emptyList()
+    lateinit var contributor: Contributor
 
 }

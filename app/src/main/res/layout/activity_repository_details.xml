@@ -8,30 +8,7 @@
         tools:context=".RepositoryDetailsActivity"
         xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
-            android:id="@+id/progress_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-    >
-        <me.itangqi.waveloadingview.WaveLoadingView
-                android:layout_centerInParent="true"
-                android:id="@+id/waveLoadingView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                app:wlv_borderColor="@color/colorAccent"
-                app:wlv_borderWidth="3dp"
-                app:wlv_progressValue="40"
-                android:layout_gravity="center"
-                app:wlv_shapeType="circle"
-                app:wlv_round_rectangle="true"
-                app:wlv_triangle_direction="north"
-                app:wlv_titleCenterStrokeWidth="3dp"
-                app:wlv_titleCenterSize="24sp"
-                app:wlv_waveAmplitude="70"
-                app:wlv_waveColor="@color/colorAccent"/>
-
-    </RelativeLayout>
+    <include layout="@layout/progress_layout"/>
 
     <LinearLayout
             android:id="@+id/repository_details_layout"
@@ -74,8 +51,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="10dp"
-                            android:layout_margin="15dp"
-                            android:textSize="20sp"
+                            android:textSize="25sp"
                             android:hint="Name"
                             android:textStyle="bold"
                             android:textColor="@color/colorPrimary"
@@ -182,7 +158,7 @@
             </LinearLayout>
         </ScrollView>
         <RelativeLayout android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="40dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
                         android:elevation="3dp"
