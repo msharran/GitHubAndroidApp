@@ -17,8 +17,7 @@ import kotlinx.android.synthetic.main.filter_bottom_sheet.*
 import java.util.*
 
 class FilterDialog : BottomSheetDialogFragment(){
-    val appContext = AppContext.instance
-    val searchActivity = appContext.searchActivity
+    val searchActivity = AppContext.searchActivity
     lateinit var filterListener: FilterListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

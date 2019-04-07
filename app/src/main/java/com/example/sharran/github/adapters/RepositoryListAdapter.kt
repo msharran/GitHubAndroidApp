@@ -9,14 +9,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.example.sharran.github.R
 import com.example.sharran.github.RepositoryDetailsActivity
-import com.example.sharran.github.utils.AppContext
 import com.example.sharran.github.utils.RepositoryDetail
 import com.example.sharran.github.utils.checkNetworkAndExecute
 import kotlinx.android.synthetic.main.repository_list_item.view.*
 
 class RepositoryListAdapter(val context: Context , var repositoryList : List<RepositoryDetail>) :
     RecyclerView.Adapter<RepositoryListAdapter.RepositoryListViewHolder>() {
-    private val appContext = AppContext.instance
+    private val appContext = com.example.sharran.github.utils.AppContext
 
     class RepositoryListViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         val name: TextView = itemView.name

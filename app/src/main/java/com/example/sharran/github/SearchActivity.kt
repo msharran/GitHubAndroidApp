@@ -22,8 +22,8 @@ import java.util.concurrent.TimeUnit
 
 
 class SearchActivity : AppCompatActivity() , FilterListener{
-    private val appContext = AppContext.instance
-    private val apiClient = appContext.apiClient
+    private val appContext = AppContext
+    private val apiClient = AppContext.apiClient
     private lateinit var repositoryListAdapter : RepositoryListAdapter
     private lateinit var searchDebounce : PublishSubject<String>
 

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import com.example.sharran.github.utils.AppContext
 import kotlinx.android.synthetic.main.activity_repository_details.*
 import android.graphics.BitmapFactory
 import android.view.MenuItem
@@ -13,9 +12,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.example.sharran.github.dialogFragment.ProjectWebView
 import com.example.sharran.github.services.CompletionHandler
-import com.example.sharran.github.utils.Contributor
-import com.example.sharran.github.utils.EasyToast
-import com.example.sharran.github.utils.checkNetworkAndExecute
+import com.example.sharran.github.utils.*
 import kotlinx.android.synthetic.main.progress_layout.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
@@ -23,7 +20,7 @@ import java.net.URL
 
 
 class RepositoryDetailsActivity : AppCompatActivity() {
-    private val appContext = AppContext.instance
+    private val appContext = AppContext
     private val repositoryDetail = appContext.repositoryDetail
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -85,7 +82,7 @@ class RepositoryDetailsActivity : AppCompatActivity() {
 
     private fun fetchContributorsAndInitialize() {
         showSpinner(true)
-        appContext.apiClient.fetchContributors(
+        AppContext.apiClient.fetchContributors(
             fullName = repositoryDetail.full_name ,
             completionHandler = object : CompletionHandler{
                 override fun <T> onSuccess(response: T?) {

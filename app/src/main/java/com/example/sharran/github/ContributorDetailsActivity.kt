@@ -9,10 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import com.example.sharran.github.adapters.RepositoryListAdapter
 import com.example.sharran.github.services.CompletionHandler
-import com.example.sharran.github.utils.AppContext
-import com.example.sharran.github.utils.Contributor
-import com.example.sharran.github.utils.EasyToast
-import com.example.sharran.github.utils.RepositoryDetail
+import com.example.sharran.github.utils.*
 import kotlinx.android.synthetic.main.activity_contributor_details.*
 import kotlinx.android.synthetic.main.progress_layout.*
 import org.jetbrains.anko.doAsync
@@ -21,7 +18,7 @@ import java.net.URL
 
 class ContributorDetailsActivity : AppCompatActivity() {
 
-    private val appContext = AppContext.instance
+    private val appContext = AppContext
     private lateinit var contributor: Contributor
     private lateinit var repositoryListAdapter : RepositoryListAdapter
 
@@ -54,7 +51,7 @@ class ContributorDetailsActivity : AppCompatActivity() {
     }
 
     private fun fetchReposAndInitialize() {
-        appContext.apiClient.fetchUserRepos(
+        AppContext.apiClient.fetchUserRepos(
             userReposUrl = contributor.repos_url,
             completionHandler = object :CompletionHandler{
                 override fun <T> onSuccess(response: T?) {
