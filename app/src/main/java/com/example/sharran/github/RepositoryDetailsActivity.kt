@@ -20,8 +20,7 @@ import java.net.URL
 
 
 class RepositoryDetailsActivity : AppCompatActivity() {
-    private val appContext = AppContext
-    private val repositoryDetail = appContext.repositoryDetail
+    private val repositoryDetail = AppContext.repositoryDetail
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when {
@@ -82,7 +81,7 @@ class RepositoryDetailsActivity : AppCompatActivity() {
 
     private fun fetchContributorsAndInitialize() {
         showSpinner(true)
-        AppContext.apiClient.fetchContributors(
+        AppContext.getApiClient().fetchContributors(
             fullName = repositoryDetail.full_name ,
             completionHandler = object : CompletionHandler{
                 override fun <T> onSuccess(response: T?) {
@@ -118,8 +117,8 @@ class RepositoryDetailsActivity : AppCompatActivity() {
 
     private fun storeSelectedContributor(contributors: List<Contributor>, position: Int) {
         if (contributors.isNotEmpty()) {
-            appContext.contributor = contributors[position]
-        } else appContext.contributor = Contributor()
+            AppContext.contributor = contributors[position]
+        } else AppContext.contributor = Contributor()
     }
 
     private fun showSpinner(show: Boolean) {

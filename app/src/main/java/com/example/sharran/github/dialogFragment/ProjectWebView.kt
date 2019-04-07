@@ -15,6 +15,7 @@ import com.example.sharran.github.R
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import kotlinx.android.synthetic.main.dialog_project.*
+import kotlinx.android.synthetic.main.progress_layout.*
 
 
 class ProjectWebView : DialogFragment() {

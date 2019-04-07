@@ -18,7 +18,6 @@ import java.net.URL
 
 class ContributorDetailsActivity : AppCompatActivity() {
 
-    private val appContext = AppContext
     private lateinit var contributor: Contributor
     private lateinit var repositoryListAdapter : RepositoryListAdapter
 
@@ -36,7 +35,7 @@ class ContributorDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contributor_details)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        contributor = appContext.contributor
+        contributor = AppContext.contributor
 
         initializeRecyclerView()
         fetchReposAndInitialize()
@@ -51,7 +50,7 @@ class ContributorDetailsActivity : AppCompatActivity() {
     }
 
     private fun fetchReposAndInitialize() {
-        AppContext.apiClient.fetchUserRepos(
+        AppContext.getApiClient().fetchUserRepos(
             userReposUrl = contributor.repos_url,
             completionHandler = object :CompletionHandler{
                 override fun <T> onSuccess(response: T?) {
