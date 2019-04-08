@@ -9,15 +9,16 @@ import android.view.View
 import com.example.sharran.github.adapters.RepositoryListAdapter
 import com.example.sharran.github.dialogFragment.FilterData
 import com.example.sharran.github.dialogFragment.FilterDialog
-import com.example.sharran.github.services.CompletionHandler
 import com.example.sharran.github.services.FilterListener
 import com.example.sharran.github.utils.*
 import com.jakewharton.rxbinding2.widget.afterTextChangeEvents
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.progress_layout.*
 import java.util.concurrent.TimeUnit
 
+var disposable : Disposable? = null
 
 class SearchActivity : AppCompatActivity() , FilterListener{
     private val apiClient = AppContext.getApiClient()
@@ -70,22 +71,18 @@ class SearchActivity : AppCompatActivity() , FilterListener{
 
     private fun searchRepoFromServer(searchQuery: String) {
         showSpinner(true)
+
         apiClient.fetchRepos(
             searchQuery = "$searchQuery+sort:stars",
-            completionHandler = object : CompletionHandler {
-                override fun <T> onSuccess(response: T?) {
-                    val repositories = response ?: Repositories()
-                    updateRecyclerView(fetchFirstTen(repositories as Repositories))
-                    showSpinner(false)
-                }
+            onSuccess = { repositories -> updateRecyclerView(fetchFirstTen(repositories)) },
+            onFailure = { throwable ->
+                throwable.printStackTrace()
+                showEmptyResults(true)
+                showSpinner(false)
+                EasyToast.show(this@SearchActivity, getString(R.string.oops_cannot_connect_to_server))
+            }
+        )
 
-                override fun onFailure(throwable: Throwable) {
-                    throwable.printStackTrace()
-                    showEmptyResults(true)
-                    showSpinner(false)
-                    EasyToast.show(this@SearchActivity, getString(R.string.oops_cannot_connect_to_server))
-                }
-            })
     }
 
     private fun updateRecyclerView(repositories: List<RepositoryDetail>) {
@@ -96,6 +93,7 @@ class SearchActivity : AppCompatActivity() , FilterListener{
         showEmptyResults(false)
         repositoryListAdapter.repositoryList = repositories
         repositoryListAdapter.notifyDataSetChanged()
+        showSpinner(false)
     }
 
     private fun fetchFirstTen(repositories: Repositories): List<RepositoryDetail> {
@@ -140,4 +138,8 @@ class SearchActivity : AppCompatActivity() , FilterListener{
                     .buildQuery(filterData.createdFrom,filterData.createdTo){ from , to -> "+created:$from..$to" }
                     .buildQuery(filterData.pushedFrom,filterData.pushedTo){ from , to -> "+pushed:$from..$to" }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable?.dispose()
+    }
 }

@@ -11,7 +11,7 @@ import com.example.sharran.github.R
 import com.example.sharran.github.RepositoryDetailsActivity
 import com.example.sharran.github.utils.AppContext
 import com.example.sharran.github.utils.RepositoryDetail
-import com.example.sharran.github.utils.checkNetworkAndExecute
+import com.example.sharran.github.utils.executeOnline
 import kotlinx.android.synthetic.main.repository_list_item.view.*
 
 class RepositoryListAdapter(val context: Context , var repositoryList : List<RepositoryDetail>) :
@@ -41,7 +41,7 @@ class RepositoryListAdapter(val context: Context , var repositoryList : List<Rep
         holder.language.text = repository.language
         holder.watchers.text = repository.watchers.toString()
         holder.itemView.setOnClickListener {
-           checkNetworkAndExecute(context){
+           executeOnline(context){
                AppContext.repositoryDetail = repository
                val intent = Intent(context, RepositoryDetailsActivity::class.java)
                context.startActivity(intent)

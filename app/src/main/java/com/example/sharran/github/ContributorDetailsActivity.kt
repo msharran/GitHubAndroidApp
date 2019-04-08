@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
 import com.example.sharran.github.adapters.RepositoryListAdapter
-import com.example.sharran.github.services.CompletionHandler
 import com.example.sharran.github.utils.*
 import kotlinx.android.synthetic.main.activity_contributor_details.*
 import kotlinx.android.synthetic.main.progress_layout.*
@@ -51,18 +50,15 @@ class ContributorDetailsActivity : AppCompatActivity() {
 
     private fun fetchReposAndInitialize() {
         AppContext.getApiClient().fetchUserRepos(
-            userReposUrl = contributor.repos_url,
-            completionHandler = object :CompletionHandler{
-                override fun <T> onSuccess(response: T?) {
-                    val repositories = response ?: emptyList<RepositoryDetail>()
-                    updateRecyclerView(repositories as List<RepositoryDetail>)
-                    initializeContributorDetails()
-                }
-
-                override fun onFailure(throwable: Throwable) {
-                    showSpinner(false)
-                    EasyToast.show(this@ContributorDetailsActivity, getString(R.string.oops_cannot_connect_to_server))
-                }
+            url = contributor.repos_url,
+            onSuccess = { repositories ->
+                updateRecyclerView(repositories)
+                initializeContributorDetails()
+            },
+            onFailure = {
+                it.printStackTrace()
+                showSpinner(false)
+                EasyToast.show(this@ContributorDetailsActivity, getString(R.string.oops_cannot_connect_to_server))
             }
         )
     }
@@ -102,6 +98,7 @@ class ContributorDetailsActivity : AppCompatActivity() {
             contributor_image.setImageBitmap(bitmap)
         showSpinner(false)
     }
+
     private fun showSpinner(show: Boolean) {
         if (show) {
             progress_layout.visibility = View.VISIBLE
@@ -114,6 +111,11 @@ class ContributorDetailsActivity : AppCompatActivity() {
             contributor_recycler_layout.visibility = View.VISIBLE
             waveLoadingView.cancelAnimation()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable?.dispose()
     }
 
 }

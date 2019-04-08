@@ -11,7 +11,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.example.sharran.github.dialogFragment.ProjectWebView
-import com.example.sharran.github.services.CompletionHandler
 import com.example.sharran.github.utils.*
 import kotlinx.android.synthetic.main.progress_layout.*
 import org.jetbrains.anko.doAsync
@@ -73,7 +72,7 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         repository_watchers.text = repositoryDetail.watchers.toString()
         repository_language.text = repositoryDetail.language
         repository_link.setOnClickListener {
-           checkNetworkAndExecute(this){
+           executeOnline(this){
                ProjectWebView().apply { url = repositoryDetail.html_url }.show(supportFragmentManager,"")
            }
         }
@@ -83,18 +82,15 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         showSpinner(true)
         AppContext.getApiClient().fetchContributors(
             fullName = repositoryDetail.full_name ,
-            completionHandler = object : CompletionHandler{
-                override fun <T> onSuccess(response: T?) {
-                    val contributors = if (response == null) emptyList() else response  as List<Contributor>
-                    initializeContributorsList(contributors)
-                    initializeRepoDetails()
-                    setImageInBackground()
-                }
-
-                override fun onFailure(throwable: Throwable) {
-                    showSpinner(false)
-                    EasyToast.show(this@RepositoryDetailsActivity,getString(R.string.oops_cannot_connect_to_server))
-                }
+            onSuccess = { contributors ->
+                initializeContributorsList(contributors)
+                initializeRepoDetails()
+                setImageInBackground()
+            },
+            onFailure = {
+                it.printStackTrace()
+                showSpinner(false)
+                EasyToast.show(this@RepositoryDetailsActivity,getString(R.string.oops_cannot_connect_to_server))
             }
         )
     }
@@ -108,7 +104,7 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, contributorNames)
         contributors_list.adapter = adapter
         contributors_list.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            checkNetworkAndExecute(this){
+            executeOnline(this){
                 storeSelectedContributor(contributors, position)
                 startActivity(Intent(this@RepositoryDetailsActivity,ContributorDetailsActivity::class.java))
             }
@@ -131,5 +127,10 @@ class RepositoryDetailsActivity : AppCompatActivity() {
             repository_details_layout.visibility = View.VISIBLE
             waveLoadingView.cancelAnimation()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable?.dispose()
     }
 }
