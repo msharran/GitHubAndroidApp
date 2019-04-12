@@ -15,7 +15,7 @@ import com.example.sharran.github.R
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import kotlinx.android.synthetic.main.dialog_project.*
-import kotlinx.android.synthetic.main.progress_layout.*
+import kotlinx.android.synthetic.main.progress_view.*
 
 
 class ProjectWebView : DialogFragment() {
@@ -67,13 +67,11 @@ class ProjectWebView : DialogFragment() {
 
     private fun showSpinner(show: Boolean) {
         if (show) {
-            progress_layout.visibility = View.VISIBLE
-            project_webview.visibility = View.GONE
-            waveLoadingView.startAnimation()
+            shimmer_layout.visibility = View.VISIBLE
+            progress_shimmer.startShimmer()
         } else {
-            progress_layout.visibility = View.GONE
-            project_webview.visibility = View.VISIBLE
-            waveLoadingView.cancelAnimation()
+            progress_shimmer.stopShimmer()
+            shimmer_layout.visibility = View.GONE
         }
     }
 

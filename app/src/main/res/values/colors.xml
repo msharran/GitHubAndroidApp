@@ -6,4 +6,5 @@
     <color name="white">#ffffff</color>
     <color name="grey">#FAFAFA</color>
     <color name="blue">#0000EE</color>
+    <color name="placeholderBg">#dddddd</color>
 </resources>

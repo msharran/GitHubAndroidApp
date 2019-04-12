@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
+<LinearLayout
+        android:orientation="vertical"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context=".RepositoryDetailsActivity"
         xmlns:tools="http://schemas.android.com/tools">
 
-    <include layout="@layout/progress_layout"/>
+    <include layout="@layout/progress_view"/>
 
     <LinearLayout
             android:id="@+id/repository_details_layout"
@@ -178,4 +178,4 @@
                 android:padding="10dp"
                 android:background="@android:color/white"/>
     </LinearLayout>
-</RelativeLayout>
+</LinearLayout>

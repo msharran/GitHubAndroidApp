@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
+<LinearLayout
+        android:orientation="vertical"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 >
-    <include layout="@layout/progress_layout"/>
+    <include layout="@layout/progress_view"/>
     <WebView
             android:id="@+id/project_webview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:scrollbars="vertical"
     />
-</RelativeLayout>
+</LinearLayout>

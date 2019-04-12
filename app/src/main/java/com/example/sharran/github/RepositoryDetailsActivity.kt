@@ -12,7 +12,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.example.sharran.github.dialogFragment.ProjectWebView
 import com.example.sharran.github.utils.*
-import kotlinx.android.synthetic.main.progress_layout.*
+import kotlinx.android.synthetic.main.progress_view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.net.URL
@@ -36,7 +36,7 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_repository_details)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        fetchContributorsAndInitialize()
+        initialize()
     }
 
     private fun setImageInBackground() {
@@ -78,7 +78,7 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchContributorsAndInitialize() {
+    private fun initialize() {
         showSpinner(true)
         AppContext.getApiClient().fetchContributors(
             fullName = repositoryDetail.full_name ,
@@ -87,8 +87,8 @@ class RepositoryDetailsActivity : AppCompatActivity() {
                 initializeRepoDetails()
                 setImageInBackground()
             },
-            onFailure = {
-                it.printStackTrace()
+            onFailure = { throwable ->
+                throwable.printStackTrace()
                 showSpinner(false)
                 EasyToast.show(this@RepositoryDetailsActivity,getString(R.string.oops_cannot_connect_to_server))
             }
@@ -103,15 +103,15 @@ class RepositoryDetailsActivity : AppCompatActivity() {
 
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, contributorNames)
         contributors_list.adapter = adapter
-        contributors_list.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        contributors_list.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             executeOnline(this){
-                storeSelectedContributor(contributors, position)
+                saveSelection(contributors, position)
                 startActivity(Intent(this@RepositoryDetailsActivity,ContributorDetailsActivity::class.java))
             }
         }
     }
 
-    private fun storeSelectedContributor(contributors: List<Contributor>, position: Int) {
+    private fun saveSelection(contributors: List<Contributor>, position: Int) {
         if (contributors.isNotEmpty()) {
             AppContext.contributor = contributors[position]
         } else AppContext.contributor = Contributor()
@@ -119,13 +119,11 @@ class RepositoryDetailsActivity : AppCompatActivity() {
 
     private fun showSpinner(show: Boolean) {
         if (show) {
-            progress_layout.visibility = View.VISIBLE
-            repository_details_layout.visibility = View.GONE
-            waveLoadingView.startAnimation()
+            shimmer_layout.visibility = View.VISIBLE
+            progress_shimmer.startShimmer()
         } else {
-            progress_layout.visibility = View.GONE
-            repository_details_layout.visibility = View.VISIBLE
-            waveLoadingView.cancelAnimation()
+            progress_shimmer.stopShimmer()
+            shimmer_layout.visibility = View.GONE
         }
     }
 

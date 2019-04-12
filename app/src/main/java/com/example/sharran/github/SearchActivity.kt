@@ -15,7 +15,8 @@ import com.jakewharton.rxbinding2.widget.afterTextChangeEvents
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_search.*
-import kotlinx.android.synthetic.main.progress_layout.*
+import kotlinx.android.synthetic.main.progress_view.*
+import org.jetbrains.anko.getStackTraceString
 import java.util.concurrent.TimeUnit
 
 var disposable : Disposable? = null
@@ -38,7 +39,6 @@ class SearchActivity : AppCompatActivity() , FilterListener{
         repositoryListRecyclerView.layoutManager = LinearLayoutManager(this)
         repositoryListAdapter = RepositoryListAdapter(this, emptyList())
         repositoryListRecyclerView.adapter = repositoryListAdapter
-        showEmptyResults(true)
     }
 
     @SuppressLint("CheckResult")
@@ -70,16 +70,19 @@ class SearchActivity : AppCompatActivity() , FilterListener{
     }
 
     private fun searchRepoFromServer(searchQuery: String) {
-        showSpinner(true)
 
+        showEmptyResults(false)
+        showSpinner(true)
         apiClient.fetchRepos(
             searchQuery = "$searchQuery+sort:stars",
             onSuccess = { repositories -> updateRecyclerView(fetchFirstTen(repositories)) },
             onFailure = { throwable ->
-                throwable.printStackTrace()
-                showEmptyResults(true)
                 showSpinner(false)
-                EasyToast.show(this@SearchActivity, getString(R.string.oops_cannot_connect_to_server))
+                showEmptyResults(true)
+                if (throwable.message != "HTTP 422 Unprocessable Entity") {
+                    EasyToast.show(this@SearchActivity,getString(R.string.oops_cannot_connect_to_server))
+                    throwable.printStackTrace()
+                }
             }
         )
 
@@ -87,7 +90,8 @@ class SearchActivity : AppCompatActivity() , FilterListener{
 
     private fun updateRecyclerView(repositories: List<RepositoryDetail>) {
         if (repositories.isEmpty()){
-         showEmptyResults(true)
+            showEmptyResults(true)
+            showSpinner(false)
             return
         }
         showEmptyResults(false)
@@ -116,14 +120,12 @@ class SearchActivity : AppCompatActivity() , FilterListener{
 
     private fun showSpinner(show: Boolean) {
         if (show){
-            progress_layout.visibility = View.VISIBLE
-            search_recycler_layout.visibility = View.GONE
-            waveLoadingView.startAnimation()
+            shimmer_layout.visibility = View.VISIBLE
+            progress_shimmer.startShimmer()
         }
         else{
-            progress_layout.visibility = View.GONE
-            search_recycler_layout.visibility = View.VISIBLE
-            waveLoadingView.cancelAnimation()
+            progress_shimmer.stopShimmer()
+            shimmer_layout.visibility = View.GONE
         }
     }
 

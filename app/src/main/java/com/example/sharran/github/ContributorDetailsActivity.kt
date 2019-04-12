@@ -10,7 +10,7 @@ import android.view.View
 import com.example.sharran.github.adapters.RepositoryListAdapter
 import com.example.sharran.github.utils.*
 import kotlinx.android.synthetic.main.activity_contributor_details.*
-import kotlinx.android.synthetic.main.progress_layout.*
+import kotlinx.android.synthetic.main.progress_view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import java.net.URL
@@ -101,15 +101,11 @@ class ContributorDetailsActivity : AppCompatActivity() {
 
     private fun showSpinner(show: Boolean) {
         if (show) {
-            progress_layout.visibility = View.VISIBLE
-            contributor_details_layout.visibility = View.GONE
-            contributor_recycler_layout.visibility = View.GONE
-            waveLoadingView.startAnimation()
+            shimmer_layout.visibility = View.VISIBLE
+            progress_shimmer.startShimmer()
         } else {
-            progress_layout.visibility = View.GONE
-            contributor_details_layout.visibility = View.VISIBLE
-            contributor_recycler_layout.visibility = View.VISIBLE
-            waveLoadingView.cancelAnimation()
+            progress_shimmer.stopShimmer()
+            shimmer_layout.visibility = View.GONE
         }
     }
 

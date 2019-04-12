@@ -7,7 +7,7 @@
         android:orientation="vertical"
         tools:context=".ContributorDetailsActivity">
 
-    <include layout="@layout/progress_layout"/>
+    <include layout="@layout/progress_view"/>
 
     <LinearLayout
             android:id="@+id/contributor_details_layout"
