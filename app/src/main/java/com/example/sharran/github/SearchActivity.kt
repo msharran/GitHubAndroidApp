@@ -16,13 +16,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.progress_view.*
-import org.jetbrains.anko.getStackTraceString
 import java.util.concurrent.TimeUnit
 
 var disposable : Disposable? = null
 
 class SearchActivity : AppCompatActivity() , FilterListener{
-    private val apiClient = AppContext.getApiClient()
+    private val apiClient = AppContext.apiClient
     private lateinit var repositoryListAdapter : RepositoryListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,16 +72,13 @@ class SearchActivity : AppCompatActivity() , FilterListener{
 
         showEmptyResults(false)
         showSpinner(true)
-        apiClient.fetchRepos(
-            searchQuery = "$searchQuery+sort:stars",
+        apiClient.GET.search(
+            query = "$searchQuery+sort:stars",
             onSuccess = { repositories -> updateRecyclerView(fetchFirstTen(repositories)) },
-            onFailure = { throwable ->
+            onFailure = { message ->
                 showSpinner(false)
                 showEmptyResults(true)
-                if (throwable.message != "HTTP 422 Unprocessable Entity") {
-                    EasyToast.show(this@SearchActivity,getString(R.string.oops_cannot_connect_to_server))
-                    throwable.printStackTrace()
-                }
+                EasyToast.show(this@SearchActivity, message)
             }
         )
 

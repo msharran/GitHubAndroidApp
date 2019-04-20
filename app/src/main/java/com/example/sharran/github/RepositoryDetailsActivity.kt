@@ -80,17 +80,16 @@ class RepositoryDetailsActivity : AppCompatActivity() {
 
     private fun initialize() {
         showSpinner(true)
-        AppContext.getApiClient().fetchContributors(
+        AppContext.apiClient.GET.contributors(
             fullName = repositoryDetail.full_name ,
             onSuccess = { contributors ->
                 initializeContributorsList(contributors)
                 initializeRepoDetails()
                 setImageInBackground()
             },
-            onFailure = { throwable ->
-                throwable.printStackTrace()
+            onFailure = { error ->
                 showSpinner(false)
-                EasyToast.show(this@RepositoryDetailsActivity,getString(R.string.oops_cannot_connect_to_server))
+                EasyToast.show(this@RepositoryDetailsActivity,error)
             }
         )
     }

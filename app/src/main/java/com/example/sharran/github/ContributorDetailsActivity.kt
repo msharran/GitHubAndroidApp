@@ -19,6 +19,7 @@ class ContributorDetailsActivity : AppCompatActivity() {
 
     private lateinit var contributor: Contributor
     private lateinit var repositoryListAdapter : RepositoryListAdapter
+    private val apiClient = AppContext.apiClient
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when {
@@ -49,16 +50,15 @@ class ContributorDetailsActivity : AppCompatActivity() {
     }
 
     private fun fetchReposAndInitialize() {
-        AppContext.getApiClient().fetchUserRepos(
+        apiClient.GET.repositories(
             url = contributor.repos_url,
             onSuccess = { repositories ->
                 updateRecyclerView(repositories)
                 initializeContributorDetails()
             },
             onFailure = {
-                it.printStackTrace()
                 showSpinner(false)
-                EasyToast.show(this@ContributorDetailsActivity, getString(R.string.oops_cannot_connect_to_server))
+                EasyToast.show(this@ContributorDetailsActivity, it)
             }
         )
     }

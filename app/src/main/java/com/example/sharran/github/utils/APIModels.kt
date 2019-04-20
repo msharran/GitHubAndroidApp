@@ -6,19 +6,19 @@ data class Repositories(
 )
 
 data class RepositoryDetail(
-    val name: String,
-    val full_name: String,
-    val description: String?,
-    val html_url: String,
-    val contributors_url: String,
-    val watchers: Int,
-    val language: String,
-    val owner: Owner
+    val name: String = "",
+    val full_name: String = "",
+    val description: String? = null,
+    val html_url: String = "",
+    val contributors_url: String = "",
+    val watchers: Int = 0,
+    val language: String = "",
+    val owner: Owner = Owner()
 )
 
 data class Owner(
-    val login: String,
-    val avatar_url: String
+    val login: String = "",
+    val avatar_url: String = ""
 )
 
 data class Contributor(
