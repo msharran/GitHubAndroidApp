@@ -72,7 +72,7 @@ class SearchActivity : AppCompatActivity() , FilterListener{
             showEmptyResults(true)
             return
         }
-        runOnline(this){
+        checkInternetAndExecute(this){
             showEmptyResults(false)
             showSpinner(true)
             apiClient.GET.search(

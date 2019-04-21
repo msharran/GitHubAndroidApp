@@ -14,6 +14,7 @@ import android.webkit.WebResourceRequest
 import com.example.sharran.github.R
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.example.sharran.github.utils.errorToast
 import kotlinx.android.synthetic.main.dialog_project.*
 import kotlinx.android.synthetic.main.progress_view.*
 
@@ -60,6 +61,7 @@ class ProjectWebView : DialogFragment() {
 
             override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
                 super.onReceivedError(view, request, error)
+                activity!!.applicationContext.errorToast("Oops! Cannot connect to server. Please Check your Internet connection and try again")
                 showSpinner(false)
             }
         }

@@ -17,7 +17,6 @@ import com.bumptech.glide.request.target.Target
 import com.example.sharran.github.dialogFragment.ProjectWebView
 import com.example.sharran.github.utils.*
 import kotlinx.android.synthetic.main.progress_view.*
-import org.jetbrains.anko.toast
 
 
 class RepositoryDetailsActivity : AppCompatActivity() {
@@ -65,7 +64,7 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         repository_watchers.text = repositoryDetail.watchers.toString()
         repository_language.text = repositoryDetail.language
         repository_link.setOnClickListener {
-           runOnline(this){
+           checkInternetAndExecute(this){
                ProjectWebView().apply { url = repositoryDetail.html_url }.show(supportFragmentManager,"")
            }
         }
@@ -96,14 +95,14 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, contributorNames)
         contributors_list.adapter = adapter
         contributors_list.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            runOnline(this){
-                saveSelection(contributors, position)
+            checkInternetAndExecute(this){
+                saveInAppContext(contributors, position)
                 startActivity(Intent(this@RepositoryDetailsActivity,ContributorDetailsActivity::class.java))
             }
         }
     }
 
-    private fun saveSelection(contributors: List<Contributor>, position: Int) {
+    private fun saveInAppContext(contributors: List<Contributor>, position: Int) {
         if (contributors.isNotEmpty()) {
             AppContext.contributor = contributors[position]
         } else AppContext.contributor = Contributor()
