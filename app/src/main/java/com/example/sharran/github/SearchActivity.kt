@@ -89,7 +89,7 @@ class SearchActivity : AppCompatActivity() , FilterListener{
 
     private fun updateRecyclerView(repositories: List<RepositoryDetail>) {
         if (repositories.isEmpty()){
-            infoToast("Oops ! Cannot find repository")
+            infoToast("No repositories found")
             showEmptyResults(true)
             showSpinner(false)
             return
@@ -133,6 +133,7 @@ class SearchActivity : AppCompatActivity() , FilterListener{
         val searchQuery = constructQuery(filterData)
         println(searchQuery)
         searchRepoFromServer(searchQuery)
+        successToast("Filter Applied")
     }
 
     private fun constructQuery(filterData: FilterData)  = "${search_view.text}"

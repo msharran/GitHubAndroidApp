@@ -6,6 +6,8 @@ import android.net.ConnectivityManager
 import android.support.v4.content.ContextCompat.getSystemService
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import es.dmoral.toasty.Toasty
 import org.jetbrains.anko.toast
 
 fun hideKeyboard(view: View) {
@@ -43,14 +45,18 @@ fun checkInternetAndExecute(context: Context, task : () -> Unit){
         context.errorToast("Please check your internet connection")
 }
 
-fun Context.alertToast(message : String){
-    CustomToast(this).alertToast(message)
+fun Context.warningToast(message : String){
+    Toasty.warning(this, message, Toast.LENGTH_SHORT, true).show()
 }
 
 fun Context.infoToast(message : String){
-    CustomToast(this).infoToast(message)
+    Toasty.info(this, message, Toast.LENGTH_SHORT, true).show()
 }
 
 fun Context.errorToast(message : String){
-    CustomToast(this).errorToast(message)
+    Toasty.error(this, message, Toast.LENGTH_SHORT, true).show()
+}
+
+fun Context.successToast(message : String){
+    Toasty.success(this, message, Toast.LENGTH_SHORT, true).show()
 }
