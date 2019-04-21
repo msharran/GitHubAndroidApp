@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.support.v4.content.ContextCompat.getSystemService
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import org.jetbrains.anko.toast
 
 fun hideKeyboard(view: View) {
     val inputMethodManager = view.context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -35,9 +36,21 @@ fun isNetworkAvailable(context: Context): Boolean {
     return activeNetwork != null && activeNetwork.isConnected
 }
 
-fun executeOnline (context: Context, task : () -> Unit){
+fun runOnline(context: Context, task : () -> Unit){
     if (isNetworkAvailable(context))
         task()
     else
-        EasyToast.show(context,"Please Check Your Internet Connection...")
+        context.errorToast("Please check your internet connection")
+}
+
+fun Context.alertToast(message : String){
+    CustomToast(this).alertToast(message)
+}
+
+fun Context.infoToast(message : String){
+    CustomToast(this).infoToast(message)
+}
+
+fun Context.errorToast(message : String){
+    CustomToast(this).errorToast(message)
 }

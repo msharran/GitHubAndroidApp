@@ -150,7 +150,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
-                            android:textColor="@color/blue"
+                            android:textColor="@color/link_blue"
                             android:textSize="17sp"
                             android:paddingLeft="20dp"
                             android:hint="Project Link"/>

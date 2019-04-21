@@ -58,7 +58,7 @@ class ContributorDetailsActivity : AppCompatActivity() {
             },
             onFailure = {
                 showSpinner(false)
-                EasyToast.show(this@ContributorDetailsActivity, it)
+                errorToast(it)
             }
         )
     }

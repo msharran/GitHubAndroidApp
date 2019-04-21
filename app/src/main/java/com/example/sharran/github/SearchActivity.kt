@@ -51,7 +51,6 @@ class SearchActivity : AppCompatActivity() , FilterListener{
                 searchRepoFromServer(searchQuery = searchQuery)
             }
 
-
         search_view.setOnTouchListener { v, event ->
             val DRAWABLE_RIGHT = 2
             if(event.action == MotionEvent.ACTION_UP) {
@@ -69,23 +68,28 @@ class SearchActivity : AppCompatActivity() , FilterListener{
     }
 
     private fun searchRepoFromServer(searchQuery: String) {
-
-        showEmptyResults(false)
-        showSpinner(true)
-        apiClient.GET.search(
-            query = "$searchQuery+sort:stars",
-            onSuccess = { repositories -> updateRecyclerView(fetchFirstTen(repositories)) },
-            onFailure = { message ->
-                showSpinner(false)
-                showEmptyResults(true)
-                EasyToast.show(this@SearchActivity, message)
-            }
-        )
-
+        if (searchQuery.isEmpty()) {
+            showEmptyResults(true)
+            return
+        }
+        runOnline(this){
+            showEmptyResults(false)
+            showSpinner(true)
+            apiClient.GET.search(
+                query = "$searchQuery+sort:stars",
+                onSuccess = { repositories -> updateRecyclerView(fetchFirstTen(repositories)) },
+                onFailure = { message ->
+                    showSpinner(false)
+                    showEmptyResults(true)
+                    errorToast(message)
+                }
+            )
+        }
     }
 
     private fun updateRecyclerView(repositories: List<RepositoryDetail>) {
         if (repositories.isEmpty()){
+            infoToast("Oops ! Cannot find repository")
             showEmptyResults(true)
             showSpinner(false)
             return

@@ -1,21 +1,23 @@
 package com.example.sharran.github
 
 import android.content.Intent
-import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_repository_details.*
-import android.graphics.BitmapFactory
+import android.graphics.drawable.Drawable
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.sharran.github.dialogFragment.ProjectWebView
 import com.example.sharran.github.utils.*
 import kotlinx.android.synthetic.main.progress_view.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
-import java.net.URL
+import org.jetbrains.anko.toast
 
 
 class RepositoryDetailsActivity : AppCompatActivity() {
@@ -39,30 +41,21 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         initialize()
     }
 
-    private fun setImageInBackground() {
-        doAsync {
-            val bitmap: Bitmap?
-            try {
-                val avatarUrl = URL(repositoryDetail.owner.avatar_url)
-                bitmap = BitmapFactory.decodeStream(avatarUrl.openConnection().getInputStream())
-                uiThread {
-                    showImage(bitmap)
+    private fun loadImage() {
+        Glide.with(this)
+            .load(repositoryDetail.owner.avatar_url)
+            .placeholder(R.drawable.profile)
+            .fitCenter()
+            .listener(object : RequestListener<Drawable>{
+                override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                    showSpinner(false)
+                    return false
                 }
-            } catch (e: Exception) {
-                uiThread {
-                    e.printStackTrace()
-                    showImage(null)
+                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                    return false
                 }
-            }
-        }
-    }
-
-    private fun showImage(bitmap: Bitmap?) {
-        if (bitmap == null)
-            repository_image.setImageResource(R.drawable.profile)
-        else
-            repository_image.setImageBitmap(bitmap)
-        showSpinner(false)
+            })
+            .into(repository_image)
     }
 
     private fun initializeRepoDetails() {
@@ -72,7 +65,7 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         repository_watchers.text = repositoryDetail.watchers.toString()
         repository_language.text = repositoryDetail.language
         repository_link.setOnClickListener {
-           executeOnline(this){
+           runOnline(this){
                ProjectWebView().apply { url = repositoryDetail.html_url }.show(supportFragmentManager,"")
            }
         }
@@ -85,11 +78,11 @@ class RepositoryDetailsActivity : AppCompatActivity() {
             onSuccess = { contributors ->
                 initializeContributorsList(contributors)
                 initializeRepoDetails()
-                setImageInBackground()
+                loadImage()
             },
-            onFailure = { error ->
+            onFailure = { message ->
                 showSpinner(false)
-                EasyToast.show(this@RepositoryDetailsActivity,error)
+                errorToast(message)
             }
         )
     }
@@ -103,7 +96,7 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, contributorNames)
         contributors_list.adapter = adapter
         contributors_list.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            executeOnline(this){
+            runOnline(this){
                 saveSelection(contributors, position)
                 startActivity(Intent(this@RepositoryDetailsActivity,ContributorDetailsActivity::class.java))
             }
