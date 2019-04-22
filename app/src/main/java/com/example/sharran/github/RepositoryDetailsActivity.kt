@@ -51,6 +51,7 @@ class RepositoryDetailsActivity : AppCompatActivity() {
                     return false
                 }
                 override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                    showSpinner(false)
                     return false
                 }
             })
@@ -64,7 +65,7 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         repository_watchers.text = repositoryDetail.watchers.toString()
         repository_language.text = repositoryDetail.language
         repository_link.setOnClickListener {
-           checkInternetAndExecute(this){
+           runTaskOnline(this){
                ProjectWebView().apply { url = repositoryDetail.html_url }.show(supportFragmentManager,"")
            }
         }
@@ -95,7 +96,7 @@ class RepositoryDetailsActivity : AppCompatActivity() {
         val adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, contributorNames)
         contributors_list.adapter = adapter
         contributors_list.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            checkInternetAndExecute(this){
+            runTaskOnline(this){
                 saveInAppContext(contributors, position)
                 startActivity(Intent(this@RepositoryDetailsActivity,ContributorDetailsActivity::class.java))
             }

@@ -1,6 +1,8 @@
 package com.example.sharran.github
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -12,11 +14,17 @@ import com.example.sharran.github.dialogFragment.FilterDialog
 import com.example.sharran.github.services.FilterListener
 import com.example.sharran.github.utils.*
 import com.jakewharton.rxbinding2.widget.afterTextChangeEvents
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.progress_view.*
+import java.util.*
 import java.util.concurrent.TimeUnit
+import io.reactivex.schedulers.Schedulers
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
+import com.jakewharton.rxbinding2.widget.textChanges
+
 
 var disposable : Disposable? = null
 
@@ -65,6 +73,16 @@ class SearchActivity : AppCompatActivity() , FilterListener{
             }
             return@setOnTouchListener false
         }
+
+        ReactiveNetwork
+            .observeInternetConnectivity()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { isConnectedToInternet ->
+                if (isConnectedToInternet)
+                    successToast("Connected to Internet")
+                else
+                    warningToast("No Internet")            }
     }
 
     private fun searchRepoFromServer(searchQuery: String) {
@@ -72,7 +90,7 @@ class SearchActivity : AppCompatActivity() , FilterListener{
             showEmptyResults(true)
             return
         }
-        checkInternetAndExecute(this){
+        runTaskOnline(this){
             showEmptyResults(false)
             showSpinner(true)
             apiClient.GET.search(

@@ -38,7 +38,7 @@ fun isNetworkAvailable(context: Context): Boolean {
     return activeNetwork != null && activeNetwork.isConnected
 }
 
-fun checkInternetAndExecute(context: Context, task : () -> Unit){
+fun runTaskOnline(context: Context, task : () -> Unit){
     if (isNetworkAvailable(context))
         task()
     else
